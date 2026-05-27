@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Eid Protocol</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #ffffff;
+    color: #111;
+    font-family: "Courier New", monospace;
+    overflow: auto;
+    position: relative;
+}
+
+/* background decor */
+body::before {
+    content: "☾ ✦ ♥ ✦ ☾ ♥ ✦ ☾ ✦ ♥";
+    position: absolute;
+    font-size: 2.5rem;
+    opacity: 0.06;
+    top: 10%;
+    left: 5%;
+    transform: rotate(-10deg);
+    white-space: pre-wrap;
+    pointer-events: none;
+}
+
+body::after {
+    content: "✦ ♥ ☾ ✦ ♥ ☾ ✦ ♥ ☾ ✦";
+    position: absolute;
+    font-size: 2rem;
+    opacity: 0.05;
+    bottom: 10%;
+    right: 5%;
+    transform: rotate(8deg);
+    white-space: pre-wrap;
+    pointer-events: none;
+}
+
+/* screens */
+.screen {
+    display: none;
+    height: 100vh;
+    width: 100vw;
+    padding: 40px;
+    overflow-x: hidden;
+}
+
+.active {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.terminal {
+    max-width: 850px;
+    margin: auto;
+    width: 100%;
+}
+
+h1 {
+    margin-bottom: 25px;
+}
+
+p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+/* buttons */
+button {
+    margin-top: 30px;
+    padding: 12px 18px;
+    border: 1px solid #111;
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+button:hover {
+    background: #111;
+    color: white;
+}
+
+/* input */
+input {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #111;
+    font-family: inherit;
+}
+
+/* shake */
+@keyframes shake {
+    0% { transform: translate(0,0); }
+    25% { transform: translate(-6px,2px); }
+    50% { transform: translate(6px,-2px); }
+    75% { transform: translate(-4px,1px); }
+    100% { transform: translate(0,0); }
+}
+
+.shake {
+    animation: shake 0.4s;
+}
+
+/* ===================== */
+/* VOUCHER DESIGN (NEW)  */
+/* ===================== */
+
+.coupon {
+    border: 1px solid #111;
+    padding: 18px;
+    margin-top: 14px;
+    background: #fff;
+    position: relative;
+    box-shadow: 4px 4px 0px #111;
+}
+
+.coupon::before {
+    content: "EID VOUCHER";
+    position: absolute;
+    top: -10px;
+    left: 12px;
+    background: white;
+    padding: 0 6px;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.coupon .title {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.coupon .desc {
+    margin-top: 6px;
+}
+
+.coupon .status {
+    margin-top: 10px;
+    font-size: 12px;
+    opacity: 0.7;
+    letter-spacing: 1px;
+}
+
+/* glitch cursor feel (optional) */
+.cursor {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- SCREEN 1 -->
+<div class="screen active" id="screen1">
+    <div class="terminal">
+        <h1>EID_PROTOCOL_v2.0</h1>
+
+        <p id="line1"></p>
+        <p id="line2"></p>
+        <p id="line3"></p>
+        <p id="line4"></p>
+
+        <button id="startBtn" onclick="nextScreen(2)" style="display:none;">
+            START
+        </button>
+    </div>
+</div>
+
+<!-- SCREEN 2 -->
+<div class="screen" id="screen2">
+    <div class="terminal">
+        <h1>AUTHENTICATION REQUIRED</h1>
+
+        <p>> Enter password</p>
+        <p>> Hint: the name of the most handsome man</p>
+
+        <input id="password" placeholder="enter password..." />
+        <button id="loginBtn" onclick="handleLogin()">LOGIN</button>
+
+        <p id="msg"></p>
+    </div>
+</div>
+
+<!-- SCREEN 3 -->
+<div class="screen" id="screen3">
+    <div class="terminal">
+        <h1>SYSTEM ERROR</h1>
+
+        <p id="err1"></p>
+        <p id="err2"></p>
+        <p id="err3"></p>
+
+        <button id="continueBtn" style="display:none;" onclick="spawnSecondButton(event)">
+            CONTINUE
+        </button>
+    </div>
+</div>
+
+<!-- SCREEN 4 -->
+<div class="screen" id="screen4">
+    <div class="terminal">
+
+        <h1>EID MUBARAK ❤️</h1>
+
+        <p>ACCESS GRANTED → REWARD SYSTEM UNLOCKED</p>
+
+        <div class="coupon">
+            <div class="title">🎟 MASSAGE VOUCHER</div>
+            <div class="desc">1 full massage (no timer, no complaints allowed)</div>
+            <div class="status">STATUS: AVAILABLE</div>
+        </div>
+
+        <div class="coupon">
+            <div class="title">🌙 DATE NIGHT VOUCHER</div>
+            <div class="desc">Fully planned by me. You just show up.</div>
+            <div class="status">STATUS: AVAILABLE</div>
+        </div>
+
+        <div class="coupon">
+            <div class="title">🍰 HOMEMADE DESSERT VOUCHER</div>
+            <div class="desc">Fresh pastry or dessert made by me</div>
+            <div class="status">STATUS: AVAILABLE</div>
+        </div>
+
+        <div class="coupon">
+            <div class="title">🤍 EXTRA HUGS VOUCHER</div>
+            <div class="desc">Unlimited hugs on demand</div>
+            <div class="status">STATUS: ALWAYS ACTIVE</div>
+        </div>
+
+        <div class="coupon">
+            <div class="title">🎮 GAMING PASS</div>
+            <div class="desc">No complaints. Full focus gaming session</div>
+            <div class="status">STATUS: AVAILABLE</div>
+        </div>
+
+        <div class="coupon">
+            <div class="title">🍿 MOVIE NIGHT VOUCHER</div>
+            <div class="desc">Phones off. Snacks included.</div>
+            <div class="status">STATUS: AVAILABLE</div>
+        </div>
+
+        <div class="coupon">
+            <div class="title">🍽 FAVORITE MEAL VOUCHER</div>
+            <div class="desc">I cook whatever you miss most</div>
+            <div class="status">STATUS: AVAILABLE</div>
+        </div>
+
+        <div class="coupon">
+            <div class="title">💬 “YOU WERE RIGHT” VOUCHER</div>
+            <div class="desc">Can be redeemed once. Maybe twice. Maybe.</div>
+            <div class="status">STATUS: LIMITED EDITION</div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+const correct = "anas";
+let loginActive = false;
+
+const loginBtn = document.getElementById("loginBtn");
+const input = document.getElementById("password");
+
+/* LOGIN ACTIVE */
+input.addEventListener("input", () => {
+    loginActive = input.value.trim().length > 0;
+});
+
+/* NAV */
+function nextScreen(n) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById("screen" + n).classList.add("active");
+
+    if (n === 3) {
+        setTimeout(() => {
+            document.getElementById("continueBtn").style.display = "inline-block";
+            runError();
+        }, 600);
+    }
+}
+
+/* INTRO */
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+async function typeLine(el, text, speed = 25) {
+    el.textContent = "";
+    for (let i = 0; i < text.length; i++) {
+        el.textContent += text[i];
+        await sleep(speed);
+    }
+}
+
+async function runIntro() {
+    await typeLine(line1, "> Initializing system...");
+    await typeLine(line2, "> Connecting...");
+    await typeLine(line3, "> Loading emotions...");
+    await typeLine(line4, "> Status: missing you");
+
+    startBtn.style.display = "inline-block";
+}
+
+runIntro();
+
+/* LOGIN MOVE */
+function moveLoginBtn() {
+    if (!loginActive) return;
+
+    const x = Math.random() > 0.5 ? window.innerWidth - 260 : 60;
+    const y = Math.random() * (window.innerHeight - 140);
+
+    loginBtn.style.position = "fixed";
+    loginBtn.style.left = x + "px";
+    loginBtn.style.top = y + "px";
+}
+
+loginBtn.addEventListener("mouseenter", moveLoginBtn);
+
+function handleLogin() {
+    const val = input.value.trim().toLowerCase();
+
+    if (val === correct) {
+        nextScreen(3);
+    } else {
+        document.body.classList.add("shake");
+        setTimeout(() => document.body.classList.remove("shake"), 400);
+        moveLoginBtn();
+    }
+}
+
+/* ERROR GLITCH TYPE */
+function glitchType(el, text, speed = 20, chance = 0.15) {
+    return new Promise(res => {
+        let i = 0;
+        const chars = "!@#$%^&*█▓▒░";
+
+        const interval = setInterval(() => {
+            let c = text[i];
+
+            if (Math.random() < chance && c !== " ") {
+                c = chars[Math.floor(Math.random() * chars.length)];
+            }
+
+            el.textContent += c;
+            i++;
+
+            if (i >= text.length) {
+                clearInterval(interval);
+                res();
+            }
+        }, speed);
+    });
+}
+
+async function runError() {
+    await glitchType(err1, "> ERROR 403 detected...");
+    await glitchType(err2, "> system instability detected...");
+    await glitchType(err3, "> attempting recovery...");
+}
+
+/* CONTINUE FLOW */
+function spawnSecondButton(e) {
+    const btn = e.target;
+
+    btn.innerText = "ok fine...";
+
+    btn.style.position = "fixed";
+    btn.style.left = (Math.random() > 0.5 ? window.innerWidth - 240 : 40) + "px";
+    btn.style.top = (Math.random() * (window.innerHeight - 120)) + "px";
+
+    btn.onclick = () => {
+
+        btn.remove();
+
+        const b2 = document.createElement("button");
+        b2.innerText = "ok for real this time";
+
+        b2.style.position = "fixed";
+        b2.style.left = (Math.random() > 0.5 ? window.innerWidth - 260 : 40) + "px";
+        b2.style.top = (Math.random() * (window.innerHeight - 120)) + "px";
+
+        document.body.appendChild(b2);
+
+        b2.onclick = () => {
+            b2.remove();
+            nextScreen(4);
+        };
+    };
+}
+</script>
+
+</body>
+</html>
